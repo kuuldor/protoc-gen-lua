@@ -17,14 +17,14 @@ try:
 except ImportError:
     from io import StringIO  # Python 3
 
-import plugin_pb2
-import google.protobuf.descriptor_pb2 as descriptor_pb2
+from google.protobuf.compiler import plugin_pb2
+from google.protobuf import descriptor_pb2
 
 _packages = {}
 _files = {}
 _message = {}
 
-FDP = plugin_pb2.descriptor_pb2.FieldDescriptorProto
+FDP = descriptor_pb2.FieldDescriptorProto
 
 if sys.platform == 'win32':
     import msvcrt, os
@@ -419,14 +419,14 @@ def code_gen_file(proto_file, env, is_gen):
             lua('local %s_pb = require \'%s_pb\')\n' % (i, i))
 
         lua('\n')
-        map(lua, env.descriptor)
+        list(map(lua, env.descriptor))
         lua('\n')
-        map(lua, env.context)
+        list(map(lua, env.context))
         lua('\n')
         env.message.sort()
-        map(lua, env.message)
+        list(map(lua, env.message))
         lua('\n')
-        map(lua, env.register)
+        list(map(lua, env.register))
         lua('\n')
         lua('module.MESSAGE_TYPES = {'+','.join('\''+x.name+'\'' for x in proto_file.message_type)+'}\n')
         lua('module.ENUM_TYPES = {'+','.join('\''+x.name+'\'' for x in proto_file.enum_type)+'}\n')
