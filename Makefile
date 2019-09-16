@@ -1,6 +1,6 @@
 .PHONY: all rockspec build install-test clean
 
-VERSION = 1.1.1
+VERSION = 1.1.2
 NAME = protobuf-$(VERSION)-0
 
 all: build
