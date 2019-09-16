@@ -438,7 +438,11 @@ def code_gen_file(proto_file, env, is_gen):
     env.exit_file()
 
 def main():
-    plugin_require_bin = sys.stdin.read()
+    if sys.version_info >= (3, 0):
+        plugin_require_bin = sys.stdin.buffer.read()
+    else:
+        plugin_require_bin = sys.stdin.read()
+
     code_gen_req = plugin_pb2.CodeGeneratorRequest()
     code_gen_req.ParseFromString(plugin_require_bin)
 
@@ -453,8 +457,10 @@ def main():
         file_desc.name = k
         file_desc.content = _files[k]
 
-    sys.stdout.write(code_generated.SerializeToString())
+    if sys.version_info >= (3, 0):
+        sys.stdout.buffer.write(code_generated.SerializeToString())
+    else:
+        sys.stdout.write(code_generated.SerializeToString())
 
 if __name__ == '__main__':
     main()
-
